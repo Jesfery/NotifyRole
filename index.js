@@ -53,6 +53,12 @@ function handleMessage(message) {
     }
 }
 
+/**
+ * Will tag (mention) online users in a given role.
+ * 
+ * @param {Message} message 
+ * @param {Array} args 
+ */
 function notifyRole(message, args) {
     return new Promise((resolve, reject) => {
         let guild, 
