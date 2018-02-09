@@ -29,7 +29,6 @@ function handleMessage(message) {
     var author = message.author,
         textChannel, voiceChannel, max;
 
-    // So the bot doesn't reply to iteself
     if (message.author.bot) return;
 
     // Check if the message starts with the prefix trigger
