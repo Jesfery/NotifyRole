@@ -26,7 +26,7 @@ bot.on('ready', function() {
     
     bot.guilds.forEach(guild => {
         guild.channels.forEach(channel => {
-            if (channel.name.endsWith('-temp-channel')) {
+            if (channel.name.endsWith(postfix)) {
                 //Incase of unexpected shutdown, give existing channels another timeout at startup.
                 timeouts.set(channel.id, setTimeout(channel.delete.bind(channel), timeout));
             }
