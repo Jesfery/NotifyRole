@@ -138,7 +138,7 @@ function notifyRole(message, args) {
         promise.then(channel => {
             textChannel.send('@here\n\n' + args.join(' '));
 
-            //Give the channel an extra timeout when the each time the command is used.
+            //Give the channel an extra timeout each time the command is used.
             if (textChannel.timeoutObj) {
                 clearTimeout(textChannel.timeoutObj);
             }
