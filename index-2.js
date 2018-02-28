@@ -15,6 +15,9 @@ const categoryName = 'game specific text chat';
 //Postfix for the temporary channel
 const postfix = '-temp-channel';
 
+//Channel timeouts
+const timeouts = new Discord.Collection();
+
 // Instance of Discord to control the bot
 const bot = new Discord.Client();
 
@@ -25,7 +28,7 @@ bot.on('ready', function() {
         guild.channels.forEach(channel => {
             if (channel.name.endsWith('-temp-channel')) {
                 //Incase of unexpected shutdown, give existing channels another timeout at startup.
-                channel.timeoutObj = setTimeout(channel.delete.bind(channel), timeout * 60000);
+                timeouts.set(channel.id, setTimeout(channel.delete.bind(channel), timeout * 60000));
             }
         });
     });
@@ -55,12 +58,11 @@ function handleMessage(message) {
 
     }
 
-    if (message.channel && message.channel.timeoutObj) {
+    if (message.channel && timeouts.has(channel.id)) {
         //temp channel activity detected, give it another timeout.
-
         let textChannel = message.channel;
-        clearTimeout(textChannel.timeoutObj);
-        textChannel.timeoutObj = setTimeout(textChannel.delete.bind(textChannel), timeout * 60000);
+        clearTimeout(timeouts.get(textChannel.id));
+        timeouts.set(textChannel.id, setTimeout(textChannel.delete.bind(textChannel), timeout * 60000));
     }
 
 }
@@ -144,13 +146,12 @@ function notifyRole(message, args) {
         promise.then(channel => {
             textChannel.send('@here\n\n' + args.join(' '));
 
-            //Give the channel an extra timeout each time the command is used.
-            if (textChannel.timeoutObj) {
-                clearTimeout(textChannel.timeoutObj);
+            if (timeouts.has(textChannel.id)) {
+                clearTimeout(timeouts.get(textChannel.id));
             }
 
             //Remove the channel after the configured timeout
-            textChannel.timeoutObj = setTimeout(textChannel.delete.bind(textChannel), timeout * 60000);
+            timeouts.set(textChannel.id, setTimeout(textChannel.delete.bind(textChannel), timeout * 60000));
 
             resolve();
         });
