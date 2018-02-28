@@ -6,8 +6,8 @@ const Discord = require('discord.js');
 // Discord Token, located in the Discord application console - https://discordapp.com/developers/applications/me/
 const { token, prefix } = require('./config.json');
 
-//Lifetime of channel (in minutes)
-const timeout = 30;
+//Lifetime of channel (in ms)
+const timeout = 30 * 60000;
 
 //Game specific roles category name.
 const categoryName = 'game specific text chat';
@@ -28,7 +28,7 @@ bot.on('ready', function() {
         guild.channels.forEach(channel => {
             if (channel.name.endsWith('-temp-channel')) {
                 //Incase of unexpected shutdown, give existing channels another timeout at startup.
-                timeouts.set(channel.id, setTimeout(channel.delete.bind(channel), timeout * 60000));
+                timeouts.set(channel.id, setTimeout(channel.delete.bind(channel), timeout));
             }
         });
     });
@@ -62,7 +62,7 @@ function handleMessage(message) {
         //temp channel activity detected, give it another timeout.
         let textChannel = message.channel;
         clearTimeout(timeouts.get(textChannel.id));
-        timeouts.set(textChannel.id, setTimeout(textChannel.delete.bind(textChannel), timeout * 60000));
+        timeouts.set(textChannel.id, setTimeout(textChannel.delete.bind(textChannel), timeout));
     }
 
 }
@@ -151,7 +151,7 @@ function notifyRole(message, args) {
             }
 
             //Remove the channel after the configured timeout
-            timeouts.set(textChannel.id, setTimeout(textChannel.delete.bind(textChannel), timeout * 60000));
+            timeouts.set(textChannel.id, setTimeout(textChannel.delete.bind(textChannel), timeout));
 
             resolve();
         });
