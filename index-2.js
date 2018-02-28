@@ -34,9 +34,6 @@ bot.on('ready', function() {
 });
 
 function handleMessage(message) {
-    let author = message.author,
-        textChannel, voiceChannel, max;
-
     if (message.author.bot) return;
 
     // Check if the message starts with the prefix trigger
@@ -57,6 +54,15 @@ function handleMessage(message) {
         }
 
     }
+
+    if (message.channel && message.channel.timeoutObj) {
+        //temp channel activity detected, give it another timeout.
+
+        let textChannel = message.channel;
+        clearTimeout(textChannel.timeoutObj);
+        textChannel.timeoutObj = setTimeout(textChannel.delete.bind(textChannel), timeout * 60000);
+    }
+
 }
 
 /**
