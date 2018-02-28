@@ -10,7 +10,7 @@ const { token, prefix } = require('./config.json');
 const timeout = 30;
 
 //Game specific roles category name.
-const categoryName = '';
+const categoryName = 'game specific text chat';
 
 //Postfix for the temporary channel
 const postfix = '-temp-channel';
