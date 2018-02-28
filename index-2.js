@@ -12,6 +12,9 @@ const timeout = 30;
 //Game specific roles category name.
 const categoryName = '';
 
+//Postfix for the temporary channel
+const postfix = '-temp-channel';
+
 // Instance of Discord to control the bot
 const bot = new Discord.Client();
 
@@ -103,7 +106,7 @@ function notifyRole(message, args) {
             return channel.name === categoryName;
         });
 
-        channelName = role.name + '-temp-channel';
+        channelName = role.name + postfix;
 
         textChannel = guild.channels.find(function(channel) {
             return channel.name === channelName;
